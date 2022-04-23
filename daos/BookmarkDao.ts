@@ -1,27 +1,45 @@
-import Bookmark from "../models/bookmarks/Bookmark";
-import BookmarkModel from "../mongoose/bookmarks/BookmarkModel";
 import BookmarkDaoI from "../interfaces/BookmarkDaoI";
+import BookmarkModel from "../mongoose/bookmarks/BookmarkModel";
+import Bookmark from "../models/bookmarks/Bookmark";
 
 
 export default class BookmarkDao implements BookmarkDaoI {
-    private static bookmarkDao: BookmarkDao | null = null;
-
+    private static likeDao: BookmarkDao | null = null;
     public static getInstance = (): BookmarkDao => {
-        if (BookmarkDao.bookmarkDao === null) {
-            BookmarkDao.bookmarkDao = new BookmarkDao();
+        if (BookmarkDao.likeDao === null) {
+            BookmarkDao.likeDao = new BookmarkDao();
         }
-        return BookmarkDao.bookmarkDao;
+        return BookmarkDao.likeDao;
     }
-    private constructor() {
-    };
+    private constructor() { }
 
-    userBookmarksTuit = (uid: string, tid: string): Promise<any> =>
-        BookmarkModel.create({ tuit: tid, bookmarkedBy: uid });
+    async findAllBookmarks(): Promise<Bookmark[]> {
+        return await BookmarkModel.find();
+    }
 
-    userUnbookmarksTuit = async (uid: string, tid: string): Promise<any> =>
-        BookmarkModel.deleteOne({ tuit: tid, bookmarkedBy: uid });
+    async findAllUsersThatBookmarkedTuit(tid: string): Promise<Bookmark[]> {
+        return await BookmarkModel
+            .find({ tuit: tid })
+            .populate("bookmarkedBy")
+            .exec();
+    }
 
+    async findAllTuitsBookmarkedByUser(uid: string): Promise<Bookmark[]> {
+        return await BookmarkModel
+            .find({ bookmarkedBy: uid })
+            .populate("tuit")
+            .exec();
+    }
 
-    findBookmarksByUser = (uid: string): Promise<Bookmark[]> =>
-        BookmarkModel.find({ bookmarkedBy: uid }).populate("tuit").exec();
+    async userBookmarksTuit(uid: string, tid: string): Promise<any> {
+        return await BookmarkModel.create({ tuit: tid, bookmarkedBy: uid });
+    }
+
+    async userUnBookmarkTuit(uid: string, tid: string): Promise<any> {
+        return await BookmarkModel.deleteOne({ tuit: tid, bookmarkedBy: uid });
+    }
+
+    async deleteBookmarkByID(bid: string): Promise<any> {
+        return await BookmarkModel.deleteOne({ _id: bid });
+    }
 }

@@ -1,7 +1,7 @@
 /**
  * @file Controller RESTful Web service API for likes resource
  */
-import {Express, Request, Response} from "express";
+import { Express, Request, Response } from "express";
 import LikeDao from "../daos/LikeDao";
 import LikeControllerI from "../interfaces/LikeControllerI";
 
@@ -32,17 +32,27 @@ export default class LikeController implements LikeControllerI {
      * @return TuitController
      */
     public static getInstance = (app: Express): LikeController => {
-        if(LikeController.likeController === null) {
+        if (LikeController.likeController === null) {
             LikeController.likeController = new LikeController();
+            app.get("/api/likes", LikeController.likeController.findAllLikes);
             app.get("/api/users/:uid/likes", LikeController.likeController.findAllTuitsLikedByUser);
             app.get("/api/tuits/:tid/likes", LikeController.likeController.findAllUsersThatLikedTuit);
             app.post("/api/users/:uid/likes/:tid", LikeController.likeController.userLikesTuit);
             app.delete("/api/users/:uid/unlikes/:tid", LikeController.likeController.userUnlikesTuit);
+            app.delete("/api/likes/:lid", LikeController.likeController.deleteLikeByID);
         }
         return LikeController.likeController;
     }
 
-    private constructor() {}
+    private constructor() { }
+
+    /**
+     * Retrieves all likes from the database
+     * @param {Request} req Represents request from client
+     * @param {Response} res Represents response to client
+     */
+    findAllLikes = (req: Request, res: Response) =>
+        LikeController.likeDao.findAllLikes().then(likes => res.json(likes));
 
     /**
      * Retrieves all users that liked a tuit from the database
@@ -87,5 +97,15 @@ export default class LikeController implements LikeControllerI {
      */
     userUnlikesTuit = (req: Request, res: Response) =>
         LikeController.likeDao.userUnlikesTuit(req.params.uid, req.params.tid)
+            .then(status => res.send(status));
+
+    /**
+    * @param {Request} req Represents request from client, including the
+    * path parameters lid representing the like object
+    * @param {Response} res Represents response to client, including status
+    * on whether deleting the like was successful or not
+    */
+    deleteLikeByID = (req: Request, res: Response) =>
+        LikeController.likeDao.deleteLikeByID(req.params.lid)
             .then(status => res.send(status));
 };
