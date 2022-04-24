@@ -1,4 +1,8 @@
+/**
+ * @file Declares API for FollowsController related data access object methods
+ */
 import { Request, Response } from "express";
+
 
 export default interface FollowsControllerI {
     findAllFollows(req: Request, res: Response): void;

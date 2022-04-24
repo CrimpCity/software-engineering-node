@@ -1,5 +1,5 @@
 /**
- * @file Implements mongoose model for Follows
+ * @file Implements mongoose model to CRUD documents in the Follows collection
  */
 import mongoose from 'mongoose';
 import FollowsSchema from "./FollowsSchema";

@@ -1,4 +1,8 @@
+/**
+ * @file Declares API for BookmarkController related data access object methods
+ */
 import { Request, Response } from "express";
+
 
 export default interface BookmarkControllerI {
     findAllBookmarks(req: Request, res: Response): void;
