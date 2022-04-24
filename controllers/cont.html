@@ -1,20 +1,20 @@
 <!-- * <ul>
 *     <li>
-*         GET "/api/bookmarks" to retrieve all of the bookmarks in the collection
+*         GET "/api/follows" to retrieve all of the follows in the collection
 *     </li>
 *     <li>
-*         GET "/api/tuits/:tid/bookmarks" to retrieve all users that bookmarked the given tuit
+*         GET "/api/users/:uid/followers" to retrieve all users that the given user follows
 *     </li>
 *     <li>
-*         GET "/api/users/:uid/bookmarks" to retrieve all tuits that were bookmarked the given user
+*         GET "/api/users/:uid/following" to retrieve all other users who follow the given user
 *     </li>
 *     <li>
-*         POST "/api/users/:uid/bookmarks/:tid" to record that a user bookmarked a tuit
+*         POST "/api/users/:uid/follows/:uidToFollow" to record that a user followers another user
 *     </li>
 *     <li>
-*         DELETE "/api/users/:uid/bookmarks/:tid" to remove a tuit from a user's bookmarks
+*         DELETE "/api/users/:uid/follows/:uidToUnfollow" to remove a follower from a user's followers list
 *     </li>
 *     <li>
-*         DELETE "/api/bookmarks/:bid" to remove a bookmark from the collection in the database
+*         DELETE "/api/users/:fid/follows" to remove a follow from the collection in the database
 *     </li>
 * </ul> -->

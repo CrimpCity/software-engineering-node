@@ -29,8 +29,7 @@ import BookmarkControllerI from "../interfaces/BookmarkControllerI";
  *     </li>
  * </ul>
  * @property {BookmarkDao} bookmarkDao Singleton DAO implementing bookmarks CRUD operations
- * @property {BookmarkController} BookmarkController Singleton controller implementing
- * RESTful Web service API
+ * @property {BookmarkController} BookmarkController Singleton controller implementing RESTful Web service API
  */
 export default class BookmarkController implements BookmarkControllerI {
     private static bookmarkDao: BookmarkDao = BookmarkDao.getInstance();
