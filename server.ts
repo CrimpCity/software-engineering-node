@@ -16,7 +16,9 @@ import UserController from "./controllers/UserController";
 import TuitController from "./controllers/TuitController";
 import LikeController from "./controllers/LikeController";
 import BookmarkController from './controllers/BookmarkController';
+import FollowsController from './controllers/FollowsController';
 import mongoose from "mongoose";
+
 var cors = require('cors')
 
 // build the connection string
@@ -46,6 +48,8 @@ const userController = UserController.getInstance(app);
 const tuitController = TuitController.getInstance(app);
 const likesController = LikeController.getInstance(app);
 const bookmarkController = BookmarkController.getInstance(app);
+const followsController = FollowsController.getInstance(app);
+
 /**
  * Start a server listening at port 4000 locally
  * but use environment variable PORT on Heroku if available.
