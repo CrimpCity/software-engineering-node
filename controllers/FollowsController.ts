@@ -1,8 +1,5 @@
 import { Request, Response, Express } from "express";
-import { ParamsDictionary } from "express-serve-static-core";
-import { ParsedQs } from "qs";
 import FollowsDao from "../daos/FollowsDao";
-
 import FollowsControllerI from "../interfaces/FollowsControllerI";
 
 

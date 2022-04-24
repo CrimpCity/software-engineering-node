@@ -15,9 +15,8 @@ import Message from "../../models/messages/Message";
 const MessageSchema = new mongoose.Schema<Message>({
     sender: { type: Schema.Types.ObjectId, ref: "UserModel" },
     receiver: { type: Schema.Types.ObjectId, ref: "UserModel" },
-    message: { type: String },
-    receipt: { type: Date }
+    message: String,
+    receipt: { type: Date, default: Date.now }
 }, { collection: "messages" });
-
 
 export default MessageSchema;

@@ -7,7 +7,7 @@ export default interface FollowsDaoI {
     findAllFollows(): Promise<Follows[]>;
     findAllFollowersByUser(uid: string): Promise<Follows[]>;
     findAllFollowingByUser(uid: string): Promise<Follows[]>;
-    userFollowsUser(uid: string, followedByUserId: string): Promise<any>;
-    userUnfollowsUser(uid: string, unfollowedByUserId: string): Promise<any>;
+    userFollowsUser(uid: string, uidToFollow: string): Promise<any>;
+    userUnfollowsUser(uid: string, uidToUnfollow: string): Promise<any>;
     deleteFollowsByID(fid: string): Promise<any>;
 }

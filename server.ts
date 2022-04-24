@@ -11,13 +11,14 @@
  * service
  */
 import express, { Request, Response } from 'express';
+import mongoose from "mongoose";
 import CourseController from "./controllers/CourseController";
 import UserController from "./controllers/UserController";
 import TuitController from "./controllers/TuitController";
 import LikeController from "./controllers/LikeController";
 import BookmarkController from './controllers/BookmarkController';
 import FollowsController from './controllers/FollowsController';
-import mongoose from "mongoose";
+import MessageController from './controllers/MessageController';
 
 var cors = require('cors')
 
@@ -49,7 +50,7 @@ const tuitController = TuitController.getInstance(app);
 const likesController = LikeController.getInstance(app);
 const bookmarkController = BookmarkController.getInstance(app);
 const followsController = FollowsController.getInstance(app);
-
+const messageController = MessageController.getInstance(app);
 /**
  * Start a server listening at port 4000 locally
  * but use environment variable PORT on Heroku if available.
