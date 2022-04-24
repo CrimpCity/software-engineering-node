@@ -70,7 +70,7 @@ export default class BookmarkDao implements BookmarkDaoI {
      * Deletes Bookmark instance from the bookmarks collection in the database 
      * @param {string} uid User's primary key
      * @param {string} tid Tuit's primary key
-     * @returns Promise To be notified when the Bookmark is deleted into the database
+     * @returns Promise To be notified when the Bookmark is deleted from the database
      */
     async userUnBookmarkTuit(uid: string, tid: string): Promise<any> {
         return await BookmarkModel.deleteOne({ tuit: tid, bookmarkedBy: uid });
@@ -79,7 +79,7 @@ export default class BookmarkDao implements BookmarkDaoI {
     /**
      * Deletes Bookmark instance from the bookmarks collection in the database by ID
      * @param {string} bid Bookmark's primary key
-     * @returns Promise To be notified when the Bookmark is deleted into the database
+     * @returns Promise To be notified when the Bookmark is deleted from the database
      */
     async deleteBookmarkByID(bid: string): Promise<any> {
         return await BookmarkModel.deleteOne({ _id: bid });
