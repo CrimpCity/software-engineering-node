@@ -27,8 +27,7 @@ export default class LikeController implements LikeControllerI {
     private static likeController: LikeController | null = null;
     /**
      * Creates singleton controller instance
-     * @param {Express} app Express instance to declare the RESTful Web service
-     * API
+     * @param {Express} app Express instance to declare the RESTful Web service API
      * @return TuitController
      */
     public static getInstance = (app: Express): LikeController => {

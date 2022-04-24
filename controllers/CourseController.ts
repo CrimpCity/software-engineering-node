@@ -3,7 +3,7 @@
  */
 
 import CourseControllerI from "../interfaces/CourseController";
-import {Express, Request, Response} from "express";
+import { Express, Request, Response } from "express";
 import CourseDao from "../daos/CourseDao";
 import Course from "../models/Course";
 
@@ -44,25 +44,60 @@ export default class CourseController implements CourseControllerI {
     findCourseById = (req: Request, res: Response): Promise<any> =>
         this.courseDao.findCourseById(req.params.cid)
             .then(course => res.json(course));
+    /**
+     * @param  {Request} req
+     * @param  {Response} res
+     * @returns Promise
+     */
     findAllCoursesDeep = (req: Request, res: Response): Promise<any> =>
         this.courseDao.findAllCoursesDeep()
             .then(courses => res.json(courses));
+    /**
+     * @param  {Request} req
+     * @param  {Response} res
+     * @returns Promise
+     */
     findCourseByIdDeep = (req: Request, res: Response): Promise<any> =>
         this.courseDao.findCourseByIdDeep(req.params.cid)
             .then(course => res.json(course));
+    /**
+     * @param  {Request} req
+     * @param  {Response} res
+     * @returns Promise
+     */
     createCourse = (req: Request, res: Response): Promise<any> =>
         this.courseDao.createCourse(req.body)
             .then(course => res.json(course));
+    /**
+     * @param  {Request} req
+     * @param  {Response} res
+     * @returns Promise
+     */
     updateCourse = (req: Request, res: Response): Promise<any> =>
         this.courseDao.updateCourse(req.params.cid, req.body)
             .then(status => res.send(status));
+    /**
+     * @param  {Request} req
+     * @param  {Response} res
+     * @returns Promise
+     */
     deleteCourse = (req: Request, res: Response): Promise<any> =>
         this.courseDao.deleteCourse(req.params.cid)
             .then(status => res.send(status));
+    /**
+     * @param  {Request} req
+     * @param  {Response} res
+     * @returns Promise
+     */
     addSectionToCourse = (req: Request, res: Response): Promise<any> =>
         this.courseDao
             .addSectionToCourse(req.params.cid, req.params.sid)
             .then(status => res.send(status));
+    /**
+     * @param  {Request} req
+     * @param  {Response} res
+     * @returns Promise
+     */
     removeSectionFromCourse = (req: Request, res: Response): Promise<any> =>
         this.courseDao
             .removeSectionFromCourse(req.params.cid, req.params.sid)
