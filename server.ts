@@ -11,12 +11,41 @@
  * service
  */
 import express, { Request, Response } from 'express';
-import CourseController from "./controllers/CourseController";
 import UserController from "./controllers/UserController";
 import TuitController from "./controllers/TuitController";
 import LikeController from "./controllers/LikeController";
-import mongoose from "mongoose";
-var cors = require('cors')
+import mongoose from 'mongoose';
+
+
+const session = require("express-session");
+const app = express();
+let sess = {
+    // put this into an env file
+    secret: "secretKey",
+    proxy: true,
+    cookie: {
+        // this must be set to false when running the client and server locally.
+        // when we deploy, change this to true
+        secure: false,
+        sameSite: 'none'
+        // provide resave option (per warning)
+    }
+}
+
+if (process.env.ENV === 'production') {
+    app.set('trust proxy', 1)
+    sess.cookie.secure = true;
+}
+
+
+var cors = require('cors');
+app.use(session(sess));
+app.use(express.json());
+app.use(cors({
+    credentials: true,
+    origin: ['http://localhost:3000']
+}));
+
 
 // build the connection string
 const PROTOCOL = "mongodb+srv";
@@ -29,21 +58,10 @@ const connectionString = `${PROTOCOL}://${DB_USERNAME}:${DB_PASSWORD}@${HOST}/${
 // connect to the database
 mongoose.connect(connectionString);
 
-const app = express();
-app.use(cors());
-app.use(express.json());
 
-app.get('/', (req: Request, res: Response) =>
-    res.send('Welcome!'));
-
-app.get('/add/:a/:b', (req: Request, res: Response) =>
-    res.send(req.params.a + req.params.b));
-
-// create RESTful Web service API
-const courseController = new CourseController(app);
 const userController = UserController.getInstance(app);
 const tuitController = TuitController.getInstance(app);
-const likesController = LikeController.getInstance(app);
+const likeController = LikeController.getInstance(app);
 
 /**
  * Start a server listening at port 4000 locally
