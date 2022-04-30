@@ -1,7 +1,7 @@
 /**
  * @file Controller RESTful Web service API for likes resource
  */
-import {Express, Request, Response} from "express";
+import { Express, Request, Response } from "express";
 import LikeDao from "../daos/LikeDao";
 import LikeControllerI from "../interfaces/LikeControllerI";
 
@@ -32,17 +32,18 @@ export default class LikeController implements LikeControllerI {
      * @return TuitController
      */
     public static getInstance = (app: Express): LikeController => {
-        if(LikeController.likeController === null) {
+        if (LikeController.likeController === null) {
             LikeController.likeController = new LikeController();
             app.get("/api/users/:uid/likes", LikeController.likeController.findAllTuitsLikedByUser);
             app.get("/api/tuits/:tid/likes", LikeController.likeController.findAllUsersThatLikedTuit);
+            app.get("/api/users/:uid/likes/:tid", LikeController.likeController.findUserLikesTuit);
             app.post("/api/users/:uid/likes/:tid", LikeController.likeController.userLikesTuit);
-            app.delete("/api/users/:uid/unlikes/:tid", LikeController.likeController.userUnlikesTuit);
+            app.delete("/api/users/:uid/likes/:tid", LikeController.likeController.userUnlikesTuit);
         }
         return LikeController.likeController;
     }
 
-    private constructor() {}
+    private constructor() { }
 
     /**
      * Retrieves all users that liked a tuit from the database
@@ -88,4 +89,17 @@ export default class LikeController implements LikeControllerI {
     userUnlikesTuit = (req: Request, res: Response) =>
         LikeController.likeDao.userUnlikesTuit(req.params.uid, req.params.tid)
             .then(status => res.send(status));
+
+    findUserLikesTuit(req: Request, res: Response) {
+        const uid = req.params.uid;
+        const tid = req.params.tid;
+
+        // @ts-ignore
+        const profile = req.session['profile'];
+        const userId = uid === "me" && profile ?
+            profile._id : uid;
+
+        return LikeController.likeDao.findUserLikesTuit(userId, tid)
+            .then(like => res.json(like));
+    }
 };
