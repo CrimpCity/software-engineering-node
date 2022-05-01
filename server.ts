@@ -15,6 +15,7 @@ import CourseController from "./controllers/CourseController";
 import UserController from "./controllers/UserController";
 import TuitController from "./controllers/TuitController";
 import LikeController from "./controllers/LikeController";
+import AuthenticationController from './controllers/AuthenticationController';
 import mongoose from "mongoose";
 var cors = require('cors')
 
@@ -22,11 +23,15 @@ var cors = require('cors')
 const session = require("express-session");
 const app = express();
 let sess = {
-    secret: process.env.SECRET,
+    // put this into an env file
+    secret: "secretKey",
     proxy: true,
     cookie: {
-        secure: true,
+        // this must be set to false when running the client and server locally.
+        // when we deploy, change this to true
+        secure: false,
         sameSite: 'none'
+        // provide resave option (per warning)
     }
 }
 
@@ -67,6 +72,7 @@ const courseController = new CourseController(app);
 const userController = UserController.getInstance(app);
 const tuitController = TuitController.getInstance(app);
 const likesController = LikeController.getInstance(app);
+AuthenticationController(app);
 
 /**
  * Start a server listening at port 4000 locally
