@@ -1,6 +1,7 @@
+import Like from "../models/likes/Like";
 import LikeDaoI from "../interfaces/LikeDaoI";
 import LikeModel from "../mongoose/likes/LikeModel";
-import Like from "../models/likes/Like";
+
 
 export default class LikeDao implements LikeDaoI {
     private static likeDao: LikeDao | null = null;
@@ -12,24 +13,28 @@ export default class LikeDao implements LikeDaoI {
     }
     private constructor() { }
 
-    findAllUsersThatLikedTuit = async (tid: string): Promise<Like[]> =>
-        LikeModel
-            .find({ tuit: tid })
-            .populate("likedBy")
-            .exec();
+    findAllUsersThatLikedTuit = (tid: string): Promise<Like[]> =>
+        LikeModel.find({ tuit: tid }).populate("likedBy").exec();
 
-    findAllTuitsLikedByUser = async (uid: string): Promise<Like[]> =>
-        LikeModel
-            .find({ likedBy: uid })
-            .populate("tuit")
-            .exec();
 
-    userLikesTuit = async (uid: string, tid: string): Promise<any> =>
+    findAllTuitsLikedByUser = (uid: string): Promise<Like[]> =>
+        LikeModel.find({ likedBy: uid }).populate({
+            path: "tuit",
+            populate: {
+                path: "postedBy"
+            }
+        }).exec();
+
+
+    userLikesTuit = (tid: string, uid: string): Promise<any> =>
         LikeModel.create({ tuit: tid, likedBy: uid });
 
-    userUnlikesTuit = async (uid: string, tid: string): Promise<any> =>
+    userUnlikesTuit = async (tid: string, uid: string): Promise<any> =>
         LikeModel.deleteOne({ tuit: tid, likedBy: uid });
 
     findUserLikesTuit = async (uid: string, tid: string): Promise<any> =>
         LikeModel.findOne({ tuit: tid, likedBy: uid });
+
+    countLikes = async (tid: string): Promise<any> =>
+        LikeModel.count({ tuit: tid });
 }
