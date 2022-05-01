@@ -60,30 +60,30 @@ export default class DislikeController implements DislikeControllerI {
         const profile = req.session['profile'];
         const userId = uid === "me" && profile ? profile._id : uid;
 
-        // get tuit to be liked or unliked
+        // get tuit to be disliked or unDisliked
         let tuit = await DislikeController.tuitDao.findTuitById(tid);
         // if the tuit does not exit then send fail status
         if (!tuit) { res.sendStatus(404); }
 
-        // check whether it is currently liked or unliked
-        const isLiked = await DislikeController.dislikeDao.findUserDislikesTuit(userId, tid);
+        // check whether it is currently disliked or unDisliked
+        const isDisliked = await DislikeController.dislikeDao.findUserDislikesTuit(userId, tid);
 
         // user only has 1 dislike
-        if (!isLiked) {
+        if (!isDisliked) {
             // create the new dislike
             DislikeController.dislikeDao.userDislikesTuit(tid, userId);
             // get current number of dislikes
-            const numLikes = tuit.stats.dislikes;
+            const numDislikes = tuit.stats.dislikes;
             // increment number of dislikes
-            tuit.stats.dislikes = numLikes + 1;
+            tuit.stats.dislikes = numDislikes + 1;
         }
-        if (isLiked) {
+        if (isDisliked) {
             // delete a dislike
             DislikeController.dislikeDao.userUnDislikesTuit(tid, userId);
             // get current number of dislikes
-            const numLikes = tuit.stats.dislikes;
+            const numDislikes = tuit.stats.dislikes;
             // decrement number of dislikes but can't go negative
-            tuit.stats.dislikes = Math.max(numLikes - 1, 0);
+            tuit.stats.dislikes = Math.max(numDislikes - 1, 0);
         }
         // update the stats including the dislikes of the tuit and send success response
         await DislikeController.tuitDao.updateLikes(tid, tuit.stats);
