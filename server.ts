@@ -15,6 +15,7 @@ import CourseController from "./controllers/CourseController";
 import UserController from "./controllers/UserController";
 import TuitController from "./controllers/TuitController";
 import LikeController from "./controllers/LikeController";
+import DislikeController from './controllers/DislikeController';
 import AuthenticationController from './controllers/AuthenticationController';
 import mongoose from "mongoose";
 var cors = require('cors')
@@ -72,6 +73,7 @@ const courseController = new CourseController(app);
 const userController = UserController.getInstance(app);
 const tuitController = TuitController.getInstance(app);
 const likesController = LikeController.getInstance(app);
+const dislikesController = DislikeController.getInstance(app);
 AuthenticationController(app);
 
 /**
