@@ -11,7 +11,7 @@ import DislikeControllerI from "../interfaces/DislikeControllerI";
 export default class DislikeController implements DislikeControllerI {
     private static dislikeDao: DislikeDao = DislikeDao.getInstance();
     private static tuitDao: TuitDao = TuitDao.getInstance();
-    private static likeController: DislikeController | null = null;
+    private static dislikeController: DislikeController | null = null;
     /**
      * Creates singleton controller instance
      * @param {Express} app Express instance to declare the RESTful Web service
@@ -19,15 +19,15 @@ export default class DislikeController implements DislikeControllerI {
      * @return TuitController
      */
     public static getInstance = (app: Express): DislikeController => {
-        if (DislikeController.likeController === null) {
-            DislikeController.likeController = new DislikeController();
-            app.get("/api/users/:uid/dislikes", DislikeController.likeController.findAllTuitsDislikedByUser);
-            app.get("/api/tuits/:tid/dislikes", DislikeController.likeController.findAllUsersThatDislikedTuit);
-            app.get("/api/users/:uid/dislikes/:tid", DislikeController.likeController.findUserDislikesTuit);
-            app.put("/api/users/:uid/dislikes/:tid", DislikeController.likeController.userDislikesTuit);
-            app.delete("/api/users/:uid/dislikes/:tid", DislikeController.likeController.userUnDislikesTuit);
+        if (DislikeController.dislikeController === null) {
+            DislikeController.dislikeController = new DislikeController();
+            app.get("/api/users/:uid/dislikes", DislikeController.dislikeController.findAllTuitsDislikedByUser);
+            app.get("/api/tuits/:tid/dislikes", DislikeController.dislikeController.findAllUsersThatDislikedTuit);
+            app.get("/api/users/:uid/dislikes/:tid", DislikeController.dislikeController.findUserDislikesTuit);
+            app.put("/api/users/:uid/dislikes/:tid", DislikeController.dislikeController.userDislikesTuit);
+            app.delete("/api/users/:uid/dislikes/:tid", DislikeController.dislikeController.userUnDislikesTuit);
         }
-        return DislikeController.likeController;
+        return DislikeController.dislikeController;
     }
 
     private constructor() { }
