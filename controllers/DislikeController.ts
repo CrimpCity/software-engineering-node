@@ -7,7 +7,25 @@ import TuitDao from "../daos/TuitDao";
 import DislikeControllerI from "../interfaces/DislikeControllerI";
 
 
-
+/**
+ * @class DislikeController Implements RESTful Web service API for dislikes resource.
+ * Defines the following HTTP endpoints:
+ * <ul>
+ *     <li>GET /api/users/:uid/dislikes to retrieve all the tuits disliked by a user
+ *     </li>
+ *     <li>GET /api/tuits/:tid/dislikes to retrieve all users that disliked a tuit
+ *     </li>
+ *     <li>GET /api/users/:uid/dislikes/:tid to retrieve the tuit disliked by a user
+ *     </li>
+ *     <li>PUT /api/users/:uid/dislikes/:tid to record that a user dislikes a tuit
+ *     </li>
+ *     <li>DELETE /api/users/:uid/unlikes/:tid to record that a user no londer 
+ *         dislikes a tuit</li>
+ * </ul>
+ * @property {DislikeDao} DislikeDao Singleton DAO implementing dislikes CRUD operations
+ * @property {DislikeController} DislikeController Singleton controller implementing
+ * RESTful Web service API
+ */
 export default class DislikeController implements DislikeControllerI {
     private static dislikeDao: DislikeDao = DislikeDao.getInstance();
     private static tuitDao: TuitDao = TuitDao.getInstance();
@@ -32,15 +50,35 @@ export default class DislikeController implements DislikeControllerI {
 
     private constructor() { }
 
+    /**
+     * Retrieves all tuits disliked by a user from the database
+     * @param {Request} req Represents request from client, including the path
+     * parameter uid representing the user who disliked the tuits
+     * @param {Response} res Represents response to client, including the
+     * body formatted as JSON arrays containing the tuit objects that were disliked
+     */
     findAllTuitsDislikedByUser = (req: Request, res: Response) =>
         DislikeController.dislikeDao.findAllTuitsDislikedByUser(req.params.uid)
             .then(dislikes => res.json(dislikes));
 
-
+    /**
+     * Retrieves all users that disliked a tuit from the database
+     * @param {Request} req Represents request from client, including the path
+     * parameter tid representing the disliked tuit
+     * @param {Response} res Represents response to client, including the
+     * body formatted as JSON arrays containing the user objects
+     */
     findAllUsersThatDislikedTuit = (req: Request, res: Response) =>
         DislikeController.dislikeDao.findAllUsersThatDislikedTuit(req.params.tid)
             .then(dislikes => res.json(dislikes));
 
+    /**
+     * @param {Request} req Represents request from client, including the
+     * path parameters uid and tid representing the user that is disliking
+     * the tuit and the tuit being disliked
+     * @param {Response} res Represents response to client, including the
+     * body formatted as JSON arrays containing the tuit objects that were disliked
+     */
     findUserDislikesTuit(req: Request, res: Response) {
         const uid = req.params.uid;
         const tid = req.params.tid;
@@ -53,6 +91,13 @@ export default class DislikeController implements DislikeControllerI {
             .then(dislike => res.json(dislike));
     }
 
+    /**
+     * @param {Request} req Represents request from client, including the
+     * path parameters uid and tid representing the user that is disliking the tuit
+     * and the tuit being disliked
+     * @param {Response} res Represents response to client, including status
+     * on whether disliking the dislike was successful or not
+     */
     userDislikesTuit = async (req: Request, res: Response) => {
         const uid = req.params.uid;
         const tid = req.params.tid;
@@ -90,6 +135,13 @@ export default class DislikeController implements DislikeControllerI {
         res.sendStatus(200);
     };
 
+    /**
+     * @param {Request} req Represents request from client, including the
+     * path parameters uid and tid representing the user that is undisliking
+     * the tuit and the tuit being undisliked
+     * @param {Response} res Represents response to client, including status
+     * on whether deleting the dislike was successful or not
+     */
     userUnDislikesTuit = (req: Request, res: Response) =>
         DislikeController.dislikeDao.userUnDislikesTuit(req.params.uid, req.params.tid)
             .then(status => res.send(status));
